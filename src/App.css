@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+
+#root {
+  height: 100vh;
+}
+
+.header_nav .active {
+  border-bottom: 2px solid rgb(52, 183, 78);
+  color: rgb(52, 183, 78);
+}
