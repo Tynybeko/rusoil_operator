@@ -61,10 +61,11 @@ export default function Operator() {
             .catch((e: any) => {
                 setError(e?.response?.data?.detail ?? 'Не удалось найти!')
                 setData(null)
+                setContact('')
             })
             .finally(() => {
                 setLoading(false)
-                setContact('')
+                setError('')
             })
     }
 
@@ -99,10 +100,9 @@ export default function Operator() {
             })
             .finally(() => {
                 setLoading(false)
-                setContact('')
                 setConfirm(false)
                 setAmount(0)
-
+                findUser(contact)
             })
 
     }
@@ -150,7 +150,10 @@ export default function Operator() {
                         {
                             data
                                 ?
-                                <Button onClick={() => setData(null)} variant='some'>Назад</Button>
+                                <Button onClick={() => {
+                                    setData(null)
+                                    setContact('')
+                                }} variant='some'>Назад</Button>
                                 :
                                 <Input id='contact' autoFocus stateStyle='text-sm font-medium' error={error} className='text-xl' labelStyle='text-lg' placeholder='Код клиента' required type='text' value={contact} onChange={handleChange} text='Код клиента' />
 
