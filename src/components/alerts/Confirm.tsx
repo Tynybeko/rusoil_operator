@@ -37,11 +37,12 @@ export default function ConfirmAlert({ desc, title, onCancel, onConfirm, btnText
                     </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex w-full justify-between sm:flex-row-reverse sm:px-6">
-                    <Button variant='danger' onClick={onConfirm}>Подтвердить</Button>
+                    <Button onClick={onConfirm}>Подтвердить</Button>
                     <Button
+                        variant='danger'
                         onClick={onCancel}>
                         {btnText ?? 'Отмена'}
-                    </Button>
+                    </Button >
                 </div>
             </div>
         </Modal>

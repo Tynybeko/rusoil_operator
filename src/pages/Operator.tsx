@@ -61,7 +61,6 @@ export default function Operator() {
         res
             .then((res: any) => {
                 setData(res.data)
-                setError('')
             })
             .catch((e: any) => {
                 setError(e?.response?.data?.detail ?? 'Не удалось найти!')
@@ -124,11 +123,10 @@ export default function Operator() {
                             (loading || isLoading) && <MiniLoading />
                         }
                         {
-                            station?.gas_station.access_to_add_balance && <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
+                            station?.gas_station.access_to_add_balance ? <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
                                 <Button onClick={() => setProcessMethod('Remove')} variant={processMethod == 'Remove' ? 'primary' : 'some'} className={` flex-1 ${processMethod == 'Remove' ? '' : ''} text-xl font-bold`} type='button'>Снятие</Button>
                                 <Button onClick={() => setProcessMethod('Add')} variant={processMethod == 'Add' ? 'primary' : 'some'} className={`flex-1 text-xl font-bold`} type='button'>Пополнение</Button>
-
-                            </div>
+                            </div> : <h1 className='text-2xl text-center font-bold text-green-500'>Снятие</h1>
                         }
 
                         {

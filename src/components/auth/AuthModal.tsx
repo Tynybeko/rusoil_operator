@@ -68,7 +68,10 @@ export default function AuthModal({ confirm, cancel, authedUser, login, title, e
 
             <Modal className='w-full' onClose={cancel}>
                 {
-                    confConfirm && <ConfirmAlert icon className='w-[350px]' title='Conf conf vonm' desc='Bla Bla bla lk Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore facere ad saepe maxime quos eveniet ipsam iste. Dolor cupiditate consectetur ipsam eaque, quam praesentium. Error et nisi dolor recusandae. Nostrum!' onCancel={() => setConfConfirm(false)} onConfirm={() => {
+                    confConfirm && <ConfirmAlert icon className='w-[350px]' title='Conf conf vonm' desc='Bla Bla bla lk Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore facere ad saepe maxime quos eveniet ipsam iste. Dolor cupiditate consectetur ipsam eaque, quam praesentium. Error et nisi dolor recusandae. Nostrum!' onCancel={() => {
+                        setConfConfirm(false)
+                        setConfCheck(false)
+                    }} onConfirm={() => {
                         setConfCheck(true)
                         setConfConfirm(false)
                     }} />
@@ -81,8 +84,14 @@ export default function AuthModal({ confirm, cancel, authedUser, login, title, e
                             login ? <Input name='login' onChange={handleChange} autoSave='on' autoComplete='on' placeholder="Login" text='Логин' /> : null
                         }
                         <InputPassword error={isError || error} name='password' onChange={handleChange} placeholder="Пароль" text='Пароль' />
-                        <div onClick={() => setConfConfirm(true)} className='group cursor-pointer flex gap-4'>
-                            <input checked={confCheck} id='conf' type="checkbox" />
+                        <div onClick={() => setConfConfirm(true)} className='group cursor-pointer items-center flex gap-4'>
+                            <div className='w-4 h-4 rounded border-black border flex overflow-hidden items-center justify-center'>
+                                {
+                                    confCheck &&
+                                    <svg className="feather feather-check" fill="none" height="24" stroke="green" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" /></svg>
+
+                                }
+                            </div>
                             <p className='group-hover:text-blue-500'>Соглашаюсь с условиями</p>
                         </div>
                         <div className='w-full grid gap-3'>
