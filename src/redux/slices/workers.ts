@@ -25,6 +25,7 @@ const WorkersSlice = createSlice({
             .addCase(FetchWorkers.rejected, (state, { payload }) => {
                 state.isError = true
                 state.isLoading = false
+                state.data = null
             })
             .addCase(FetchWorkers.fulfilled, (state, { payload }) => {
                 state.isLoading = false

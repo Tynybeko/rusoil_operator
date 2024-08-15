@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import Loading from '../components/loading/Loading'
 import Pagination from '../components/pagination/Pagination'
@@ -28,10 +28,16 @@ const limitSelect: IOption<number | null>[] = [
 
 export default function History() {
   const dispatch = useAppDispatch()
+  const auth = useAppSelector(state => state.auth.data)
+  const checkingOperator = useMemo(() => {
+    if (!auth) return null;
+    return (auth.employee.user.current_role == 'operator')
+  }, [auth])
+
   const [query, setQuery] = useState<InitialObjectType>({
     limit: limitSelect[0].value,
     page: 1,
-    work_proccess__work__employee: null
+    work_proccess__work__employee: checkingOperator ? auth?.employee.id : null
   })
   const { isLoading, isError, data } = useAppSelector(state => state.history)
   const changeQuery = (key: string, value: any) => {
@@ -48,7 +54,7 @@ export default function History() {
     <div className='py-5'>
       <div className='mb-5 flex gap-5 w-full px-5'>
         <div className='max-w-[300px] w-full'>
-          <UserSelect onChange={(worker) => changeQuery('work_proccess__work__employee', worker?.employee.user.id)} />
+          <UserSelect disabled={!!checkingOperator} onChange={(worker) => changeQuery('work_proccess__work__employee', worker?.employee.id)} />
         </div>
         <div className='max-w-[220px] w-full'>
           <Select defaultValue={methodSelectData[0]} options={methodSelectData} onChange={(meth => changeQuery('method', meth?.value))} />
@@ -105,6 +111,14 @@ export default function History() {
                   </td>
                 </tr>
               ))
+            }
+            {
+              data && data.results.length < 1 ?
+                <tr className='border-b dark:bg-gray-800 dark:border-gray-700 bg-gray-200'>
+                  <td colSpan={5} className='text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'>
+                    Пусто
+                  </td>
+                </tr> : null
             }
           </tbody>
           <tfoot>

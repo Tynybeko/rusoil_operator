@@ -3,11 +3,13 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { FetchWorkers } from '../redux/slices/workers'
 import Emloyeer from '../components/employeer/Emloyeer'
 import ErrorAlert from '../components/alerts/Error'
+import { useNavigate } from 'react-router-dom'
 
 export default function WorkProcess() {
   const { data } = useAppSelector(state => state.auth)
-  const { data: workers } = useAppSelector(state => state.workers)
+  const { data: workers, isError } = useAppSelector(state => state.workers)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (data && data.gas_station) {
@@ -20,6 +22,9 @@ export default function WorkProcess() {
         {workers && workers.results?.map((person) => (
           <Emloyeer person={person} />
         ))}
+        {
+          isError && <ErrorAlert btnText='Операции' onClose={() => navigate('/admin/history')} desc='Не удалось получить данные!' />
+        }
       </ul>
     </div>
   )

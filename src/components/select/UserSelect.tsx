@@ -6,9 +6,10 @@ import { IWork } from '../../types'
 interface UserSelectProps {
     onChange: (result: IWork | null) => void;
     defaultValue?: IWork,
+    disabled?: boolean,
 }
 
-export default function UserSelect({ defaultValue, onChange }: UserSelectProps) {
+export default function UserSelect({ defaultValue, onChange, disabled }: UserSelectProps) {
     const selectRef = useRef<HTMLDivElement | null>(null)
     const [open, setOpen] = useState(false)
     const { data } = useAppSelector(state => state.workers)
@@ -32,7 +33,7 @@ export default function UserSelect({ defaultValue, onChange }: UserSelectProps) 
     return (
         <div ref={selectRef}>
             <div className="relative mt-2">
-                <button onClick={() => setOpen(true)} type="button" className="cursor-pointer relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+                <button disabled={disabled} onClick={() => setOpen(true)} type="button" className="cursor-pointer disabled:bg-gray-200  relative w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
                     {
                         changed ?
                             <>

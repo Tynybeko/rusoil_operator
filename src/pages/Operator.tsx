@@ -2,16 +2,14 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Button, Input } from '../components/UI'
 import { IUser } from '../types'
-import { API, PRIMARY_API, } from '../axios'
-import ErrorAlert from '../components/alerts/Error'
+import { API, } from '../axios'
 import { useAppSelector } from '../redux/hooks'
 import { useNavigate } from 'react-router-dom'
 import MiniLoading from '../components/loading/MiniLoading'
 import UserHistory from '../components/operator/UserHistory'
 import ConfirmAlert from '../components/alerts/Confirm'
-import Alert from '../components/alerts/Alert'
 import { useDispatch } from 'react-redux'
-import OperatorActions from '../redux/slices/operator'
+import OperatorActions, { FetchAuthOperator } from '../redux/slices/operator'
 import useDebounce from '../hooks/useDebounce'
 
 
@@ -19,8 +17,9 @@ import useDebounce from '../hooks/useDebounce'
 export default function Operator() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const operator = useAppSelector(state => state.operator.changed)
+    const { changed: operator, isLoading } = useAppSelector(state => state.operator)
     const [success, setSuccess] = useState('')
+    const station = useAppSelector(state => state.auth.data)
     const [loading, setLoading] = useState(false)
     const [amount, setAmount] = useState(0)
     const [confirm, setConfirm] = useState(false)
@@ -45,6 +44,11 @@ export default function Operator() {
         setContact(e.target.value)
     }
 
+    useEffect(() => {
+        const TOKEN = localStorage.getItem('scnToken')
+        if (!TOKEN) navigate(-1)
+        dispatch(FetchAuthOperator() as any)
+    }, [])
 
 
 
@@ -57,6 +61,7 @@ export default function Operator() {
         res
             .then((res: any) => {
                 setData(res.data)
+                setError('')
             })
             .catch((e: any) => {
                 setError(e?.response?.data?.detail ?? 'Не удалось найти!')
@@ -65,14 +70,14 @@ export default function Operator() {
             })
             .finally(() => {
                 setLoading(false)
-                setError('')
             })
     }
+
 
     const handleRemove = () => {
         setLoading(true)
         const response = API.post('/work-spaces/', {
-            work_proccess: operator?.id,
+            work_proccess: operator?.current_work_procces_id,
             method: processMethod,
             amount,
             client: data?.id
@@ -86,7 +91,7 @@ export default function Operator() {
                         return prev
                     })
                 }
-                setSuccess('Операция прошла успешно!')
+                setSuccess(`Операция прошла успешно! Снято ${amount} сома`)
                 setError('')
             })
             .catch(err => {
@@ -116,12 +121,16 @@ export default function Operator() {
                 <div className='w-full flex   '>
                     <label htmlFor='contact' className='relative max-w-xl h-full  sm:min-h-[400px] justify-between  overflow-y-auto w-full bg-white p-5 rounded-lg flex flex-col gap-2'>
                         {
-                            loading && <MiniLoading />
+                            (loading || isLoading) && <MiniLoading />
                         }
-                        <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
-                            <Button onClick={() => setProcessMethod('Remove')} variant={processMethod == 'Remove' ? 'primary' : 'some'} className={` flex-1 ${processMethod == 'Remove' ? '' : ''} text-xl font-bold`} type='button'>Снятие</Button>
-                            <Button onClick={() => setProcessMethod('Add')} variant={processMethod == 'Add' ? 'primary' : 'some'} className={`flex-1 text-xl font-bold`} type='button'>Пополнение</Button>
-                        </div>
+                        {
+                            station?.gas_station.access_to_add_balance && <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
+                                <Button onClick={() => setProcessMethod('Remove')} variant={processMethod == 'Remove' ? 'primary' : 'some'} className={` flex-1 ${processMethod == 'Remove' ? '' : ''} text-xl font-bold`} type='button'>Снятие</Button>
+                                <Button onClick={() => setProcessMethod('Add')} variant={processMethod == 'Add' ? 'primary' : 'some'} className={`flex-1 text-xl font-bold`} type='button'>Пополнение</Button>
+
+                            </div>
+                        }
+
                         {
                             data ?
                                 <div className="relative mt-2 flex-1">

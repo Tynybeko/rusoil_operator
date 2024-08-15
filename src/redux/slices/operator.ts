@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IInitiaBaseState, ISlice, IWork, IWorkProccess, InitialObjectType } from "../../types";
+import { IInitiaBaseState, ISlice, IUser, IWork, IWorkProccess, InitialObjectType } from "../../types";
 import { API, PRIMARY_API } from "../../axios";
 
 
 
 
 interface IOperator extends ISlice<IWorkProccess[]> {
-    changed: null | IWorkProccess
+    changed: null | IUser
 }
 
 const initialState: IOperator = {
@@ -67,9 +67,10 @@ const OperatorSlice = createSlice({
                 state.changed = null
                 localStorage.removeItem('scnToken')
             })
-            .addCase(FetchAuthOperator.fulfilled, (state) => {
+            .addCase(FetchAuthOperator.fulfilled, (state, {payload}) => {
                 state.isLoading = false
                 state.isError = false
+                state.changed = payload
             })
     },
 })

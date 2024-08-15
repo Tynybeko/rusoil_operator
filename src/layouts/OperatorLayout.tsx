@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import Header from './Header'
+import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { FetchAuthOperator } from '../redux/slices/operator'

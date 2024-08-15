@@ -53,6 +53,7 @@ interface IUser extends BaseEntity {
   "first_name": string,
   "last_name": string,
   "middle_name": string,
+  "current_work_procces_id": null | number,
   "get_full_name": string;
   "role": UserRolesEnum,
   "is_active": boolean,
@@ -100,6 +101,7 @@ interface GasStations extends BaseEntity {
   latitude: number;
   longitude: number;
   description: string;
+  access_to_add_balance: boolean
 }
 
 interface IOption<T> {
@@ -128,5 +130,6 @@ export type {
   InitialObjectType,
   IWorkSpaces,
   IWorkProccess,
-  IOption
+  IOption,
+  GasStations
 }
