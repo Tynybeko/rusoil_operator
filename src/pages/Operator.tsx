@@ -19,7 +19,6 @@ export default function Operator() {
     const navigate = useNavigate()
     const { changed: operator, isLoading } = useAppSelector(state => state.operator)
     const [success, setSuccess] = useState('')
-    const station = useAppSelector(state => state.auth.data)
     const [loading, setLoading] = useState(false)
     const [amount, setAmount] = useState(0)
     const [confirm, setConfirm] = useState(false)
@@ -61,6 +60,9 @@ export default function Operator() {
         res
             .then((res: any) => {
                 setData(res.data)
+                if (error.includes('Не удалось найти!')) {
+                    setError('')
+                }
             })
             .catch((e: any) => {
                 setError(e?.response?.data?.detail ?? 'Не удалось найти!')
@@ -99,7 +101,7 @@ export default function Operator() {
                     if ('amount' in err.response.data) {
                         return setError(err.response.data.amount ?? 'Ошибка при снятии!')
                     }
-                    setError(err?.response?.data?.detail ?? `Ошибка при снятии\n${err?.message ?? ''}`)
+                    setError(err?.response?.data?.detail ?? `Ошибка при снятии\n ${err?.message ?? ''}`)
                 }
             })
             .finally(() => {
@@ -110,6 +112,7 @@ export default function Operator() {
             })
 
     }
+    
 
     return (
         <div className="w-full h-full inset-0 overflow-hidden bg-gray-400">
@@ -118,12 +121,12 @@ export default function Operator() {
             }
             <div className="w-full h-full inset-0 overflow-hidden">
                 <div className='w-full flex   '>
-                    <label htmlFor='contact' className='relative max-w-xl h-full  sm:min-h-[400px] justify-between  overflow-y-auto w-full bg-white p-5 rounded-lg flex flex-col gap-2'>
+                    <label htmlFor='contact' className='relative max-w-xl h-full  h-[480px] justify-between  overflow-y-auto w-full bg-white p-5 rounded-lg flex flex-col gap-2'>
                         {
                             (loading || isLoading) && <MiniLoading />
                         }
                         {
-                            station?.gas_station.access_to_add_balance ? <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
+                            operator?.gas_station.access_to_add_balance ? <div className='items-center flex w-full gap-2 border-b-2 pb-2 border-red-400'>
                                 <Button onClick={() => setProcessMethod('Remove')} variant={processMethod == 'Remove' ? 'primary' : 'some'} className={` flex-1 ${processMethod == 'Remove' ? '' : ''} text-xl font-bold`} type='button'>Снятие</Button>
                                 <Button onClick={() => setProcessMethod('Add')} variant={processMethod == 'Add' ? 'primary' : 'some'} className={`flex-1 text-xl font-bold`} type='button'>Пополнение</Button>
                             </div> : <h1 className='text-2xl text-center font-bold text-green-500'>Снятие</h1>
@@ -135,7 +138,7 @@ export default function Operator() {
                                     <div className="mt-1 border-t border-gray-100">
                                         <dl className="divide-y divide-gray-100">
                                             <div className="px-4 border-y-2  py-3 sm:gap-4 sm:px-0 flex justify-between items-center">
-                                                <dt className="text-3xl font-medium leading-6 text-gray-900 flex gap-3 items-center"><p className='truncate text-nowrap max-w-[380px]'> {data?.get_full_name}</p>{data?.client.is_verify && <img width={40} height={40} src='/png/verify.png' />}</dt>
+                                                <dt className="text-3xl font-medium leading-6 text-gray-900 flex gap-3 items-center"><p className='text-wrap leading-8  max-w-[340px]'> {data?.get_full_name}</p>{data?.client.is_verify && <img width={40} height={40} src='/png/verify.png' />}</dt>
                                                 <dd className="mt-1 text-3xl leading-6 text-gray-700 sm:col-span-2 flex gap-1  flex-nowrap sm:mt-0"><span className='text-secondary500 text-4xl font-bold'>{data?.client.bonus_card.bonus_balance.toFixed(2)}</span> c</dd>
                                             </div>
                                         </dl>
@@ -160,6 +163,7 @@ export default function Operator() {
                                 <Button onClick={() => {
                                     setData(null)
                                     setContact('')
+                                    setError("")
                                 }} variant='some'>Назад</Button>
                                 :
                                 <Input id='contact' autoFocus stateStyle='text-sm font-medium' error={error} className='text-xl' labelStyle='text-lg' placeholder='Код клиента' required type='text' value={contact} onChange={handleChange} text='Код клиента' />

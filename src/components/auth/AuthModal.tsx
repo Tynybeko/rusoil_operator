@@ -18,6 +18,8 @@ interface IAuthModalProps {
     cancelBtn?: boolean
 }
 
+const POLICY = `Компания "Россия-Нефть" обязуется обеспечивать конфиденциальность и безопасность персональных данных своих пользователей. Собираемые данные будут использоваться исключительно в целяx безопасности и не будут передаваться третьим лицам без предварительного согласия пользователя, за исключением случаев, предусмотренных законодательством. Пользователи имеют право на доступ к своим данным, их корректировку или удаление по запросу. Для этого они могут обратиться по адресу +996 312 391515.`
+
 export default function AuthModal({ confirm, cancel, authedUser, login, title, error, cancelText, confirText, cancelBtn }: IAuthModalProps) {
     const { data } = useAppSelector(state => state.auth)
     const [confCheck, setConfCheck] = useState(false)
@@ -68,7 +70,7 @@ export default function AuthModal({ confirm, cancel, authedUser, login, title, e
 
             <Modal className='w-full' onClose={cancel}>
                 {
-                    confConfirm && <ConfirmAlert icon className='w-[350px]' title='Conf conf vonm' desc='Bla Bla bla lk Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore facere ad saepe maxime quos eveniet ipsam iste. Dolor cupiditate consectetur ipsam eaque, quam praesentium. Error et nisi dolor recusandae. Nostrum!' onCancel={() => {
+                    confConfirm && <ConfirmAlert icon className='w-[400px] w-full' title='Политика конфиденциальности' desc={POLICY} onCancel={() => {
                         setConfConfirm(false)
                         setConfCheck(false)
                     }} onConfirm={() => {

@@ -5,6 +5,11 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { useNavigate } from 'react-router-dom'
 import AuthActions from '../redux/slices/auth'
 import ConfirmAlert from '../components/alerts/Confirm'
+import Loading from '../components/loading/Loading'
+
+
+const POLICY = `Компания "Россия-Нефть" обязуется обеспечивать конфиденциальность и безопасность персональных данных своих пользователей. Собираемые данные будут использоваться исключительно в целяx безопасности и не будут передаваться третьим лицам без предварительного согласия пользователя, за исключением случаев, предусмотренных законодательством. Пользователи имеют право на доступ к своим данным, их корректировку или удаление по запросу. Для этого они могут обратиться по адресу +996 312 391515.`
+
 
 export default function Auth() {
   const [confCheck, setConfCheck] = useState(false)
@@ -51,7 +56,7 @@ export default function Auth() {
   return (
     <div className='w-full h-screen flex items-center justify-center'>
       {
-        confConfirm && <ConfirmAlert icon className='w-[350px]' title='Conf conf vonm' desc='Bla Bla bla lk Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore facere ad saepe maxime quos eveniet ipsam iste. Dolor cupiditate consectetur ipsam eaque, quam praesentium. Error et nisi dolor recusandae. Nostrum!' onCancel={() => {
+        confConfirm && <ConfirmAlert icon className='w-[350px]' title='Политика конфиденциальности' desc={POLICY} onCancel={() => {
           setConfConfirm(false)
           setConfCheck(false)
         }} onConfirm={() => {
@@ -59,7 +64,9 @@ export default function Auth() {
           setConfConfirm(false)
         }} />
       }
-
+      {
+        isLoading && <Loading />
+      }
       <div className='rounded-lg dark:bg-gray-700  px-4 py-2 pb-0 max-w-[350px] w-full border border-primary-500'>
         <h1 className='dark:text-white text-center text-xl'>Авторизация</h1>
         <form onSubmit={handleSumit} className='flex flex-col gap-4 p-2 rounded-t-x'>

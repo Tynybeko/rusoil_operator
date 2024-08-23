@@ -13,6 +13,7 @@ export default function WorkersLayout() {
     const { data: auth } = useAppSelector(state => state.auth)
     const { data: operators, isLoading } = useAppSelector(state => state.operator)
     useEffect(() => {
+        localStorage.removeItem('scnToken')
         if (auth) {
             dispatch(FetchWorkProccess({
                 status: true,

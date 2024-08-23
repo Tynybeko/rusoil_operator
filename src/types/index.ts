@@ -72,6 +72,7 @@ interface IUser extends BaseEntity {
   "photo_with_passport": string,
   current_role: string;
   current_position: string;
+  gas_station: GasStations
 }
 
 

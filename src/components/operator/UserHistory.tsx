@@ -87,6 +87,14 @@ export default function UserHistory({ data }: { data: IUser | null }) {
                                     </tr>
                                 ))
                             }
+                            {
+                                history.data && history.data.results.length == 0 && <tr className={` border-b dark:bg-gray-800 dark:border-gray-700 text-[14px] `}>
+                                    <th colSpan={4} scope="row" className="px-3 text-center py-2 text-2xl  font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Нету совершенных операций
+                                    </th>
+
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
